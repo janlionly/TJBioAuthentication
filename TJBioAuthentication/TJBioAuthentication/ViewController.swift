@@ -34,6 +34,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboard()
+        
+        if TJBioAuthenticator.shared.isFaceIDAvailable() {
+            print("face id available")
+        } else if TJBioAuthenticator.shared.isTouchIDAvailable() {
+            print("touch id available")
+        } else if TJBioAuthenticator.shared.isAuthIDUnavailable() {
+            print("Auth id unavailabel")
+        }
         // Do any additional setup after loading the view, typically from a nib.
     }
     

@@ -95,9 +95,32 @@ public extension TJBioAuthenticator {
     // checks if Face ID is avaiable on device
     func isFaceIDAvailable() -> Bool {
         if #available(iOS 11.0, *) {
-            return (LAContext().biometryType == .faceID)
+            let context = LAContext()
+            return (context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthentication, error: nil) && context.biometryType == .faceID)
         }
         return false
+    }
+    
+    func isTouchIDAvailable() -> Bool {
+        if #available(iOS 11.0, *) {
+            let context = LAContext()
+            return (context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthentication, error: nil) && context.biometryType == .touchID)
+        }
+        return false
+    }
+    
+    func isAuthIDUnavailable() -> Bool {
+        var available = false
+        
+        if #available(iOS 11.0, *) {
+            let context = LAContext()
+            available = (context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthentication, error: nil) && context.biometryType == .faceID)
+            if !available {
+                available = (context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthentication, error: nil) && context.biometryType == .touchID)
+            }
+        }
+        
+        return !available
     }
 }
 
